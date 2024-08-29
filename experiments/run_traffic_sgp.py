@@ -26,6 +26,16 @@ from lib.nn.encoders import (SGPSpatialEncoder, GESNEncoder, SGPEncoder,
 from lib.nn.models import (ESNModel, SGPModel, OnlineSGPModel)
 from lib.utils import encode_dataset
 
+device_name = None
+if torch.cuda.is_available():
+    device_name = torch.cuda.get_device_name(0)
+    print(f'Using GPU: {device_name}')
+else:
+    print('CUDA is not available. PyTorch will use the CPU.')
+
+torch.set_float32_matmul_precision('medium')
+torch.cuda.get_device_name(torch.cuda.current_device())
+
 
 def get_model_class(model_str):
     if model_str == 'esn':
@@ -239,14 +249,14 @@ def run_experiment(args):
         target_cls=model_cls,
         return_dict=True)
 
-    loss_fn = MaskedMAE(compute_on_step=True)
+    loss_fn = MaskedMAE()
 
-    metrics = {'mae': MaskedMAE(compute_on_step=False),
-               'mse': MaskedMSE(compute_on_step=False),
-               'mape': MaskedMAPE(compute_on_step=False),
-               'mae_at_15': MaskedMAE(compute_on_step=False, at=2),
-               'mae_at_30': MaskedMAE(compute_on_step=False, at=5),
-               'mae_at_60': MaskedMAE(compute_on_step=False, at=11)}
+    metrics = {'mae': MaskedMAE(),
+               'mse': MaskedMSE(),
+               'mape': MaskedMAPE(),
+               'mae_at_15': MaskedMAE(at=2),
+               'mae_at_30': MaskedMAE(at=5),
+               'mae_at_60': MaskedMAE(at=11)}
 
     # setup predictor
     scheduler_class = MultiStepLR
@@ -283,7 +293,7 @@ def run_experiment(args):
     trainer = pl.Trainer(max_epochs=args.epochs,
                          limit_train_batches=args.batches_epoch if args.batches_epoch > 0 else 1.0,
                          default_root_dir=logdir,
-                         gpus=1 if torch.cuda.is_available() else None,
+                         accelerator='gpu', devices=1,
                          gradient_clip_val=args.grad_clip_val,
                          callbacks=[early_stop_callback, checkpoint_callback])
 

@@ -99,10 +99,9 @@ class TemporalFeaturesMixin:
             raise NotImplementedError("This method can be used only with "
                                       "datetime-like index.")
         units = ensure_list(units)
-        mapping = {un: pd.to_timedelta('1' + un).delta
-                   for un in ['day', 'hour', 'minute', 'second',
-                              'millisecond', 'microsecond', 'nanosecond']}
-        mapping['week'] = pd.to_timedelta('1W').delta
+        mapping = {un: pd.to_timedelta('1' + un).value for un in ['day', 'hour', 'minute', 'second',
+                                                                  'millisecond', 'microsecond', 'nanosecond']}
+        mapping['week'] = pd.to_timedelta('1W').value
         mapping['year'] = 365.2425 * 24 * 60 * 60 * 10 ** 9
         index_nano = self.index.view(np.int64)
         datetime = dict()

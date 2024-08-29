@@ -25,7 +25,7 @@ global_attr: True
 #### Training params ##########################################################
 iid_sampling: True
 sgp_preprocessing: False
-workers: 16
+workers: 4
 batch_size: 4096
 batch_inference: 16
 

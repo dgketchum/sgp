@@ -46,7 +46,7 @@ def static_graph_collate(batch: List[Data], cls: Optional[type] = None) -> Data:
         cls = elem.__class__
     out = cls()
     out = out.stores_as(elem)
-    for k in elem.keys:
+    for k in elem.keys():
         pattern = elem.pattern.get(k)
         out[k], pattern = _collate([b[k] for b in batch], k, pattern)
         if pattern is not None:
