@@ -26,14 +26,17 @@ from lib.nn.encoders import (SGPSpatialEncoder, GESNEncoder, SGPEncoder,
 from lib.nn.models import (ESNModel, SGPModel, OnlineSGPModel)
 from lib.utils import encode_dataset
 
-device_name = None
-if torch.cuda.is_available():
-    device_name = torch.cuda.get_device_name(0)
-    print(f'Using GPU: {device_name}')
-else:
-    print('CUDA is not available. PyTorch will use the CPU.')
 
-torch.set_float32_matmul_precision('medium')
+device = torch.device("cpu")
+
+# device_name = None
+# if torch.cuda.is_available():
+#     device_name = torch.cuda.get_device_name(0)
+#     print(f'Using GPU: {device_name}')
+# else:
+#     print('CUDA is not available. PyTorch will use the CPU.')
+#
+# torch.set_float32_matmul_precision('medium')
 torch.cuda.get_device_name(torch.cuda.current_device())
 
 
@@ -134,7 +137,7 @@ def run_experiment(args):
     args = copy.deepcopy(args)
     if args.seed < 0:
         args.seed = np.random.randint(1e9)
-    torch.set_num_threads(max(args.workers, 1))
+    torch.set_num_threads(1)
     pl.seed_everything(args.seed)
 
     tsl.logger.info(f'SEED: {args.seed}')

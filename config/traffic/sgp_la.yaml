@@ -34,7 +34,7 @@ lr: 0.004  # 0.0035
 epochs: 200
 patience: 100
 batches_epoch: 300
-workers: 4
+workers: 0
 
 #### Model params #############################################################
 hidden_size: 960
