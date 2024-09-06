@@ -1,3 +1,4 @@
+from pprint import pprint
 import copy
 import datetime
 import os
@@ -252,6 +253,8 @@ def run_experiment(args):
         target_cls=model_cls,
         return_dict=True)
 
+    pprint(model_kwargs)
+    exit()
     loss_fn = MaskedMAE()
 
     metrics = {'mae': MaskedMAE(),

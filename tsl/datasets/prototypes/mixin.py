@@ -95,7 +95,6 @@ class TabularParsingMixin:
 class TemporalFeaturesMixin:
 
     def datetime_encoded(self, units):
-        return f'string {units}'
         if not casting.is_datetime_like_index(self.index):
             raise NotImplementedError("This method can be used only with "
                                       "datetime-like index.")
